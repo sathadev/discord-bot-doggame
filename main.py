@@ -10,20 +10,9 @@ intents.messages = True
 intents.guilds = True
 intents.message_content = True  # จำเป็นสำหรับการอ่านข้อความ
 
-# สร้าง instance ของบอท
-class MyBot(commands.Bot):
-    def __init__(self):
-        super().__init__(
-            command_prefix="!",
-            intents=intents,
-            application_id=os.getenv("APPLICATION_ID"),  # ใส่ Application ID ของคุณ
-        )
 
-    async def setup_hook(self):
-        # ซิงค์คำสั่ง Slash Command กับ Discord
-        await bot.tree.sync()
+bot = commands.Bot(command_prefix='/', intents=intents)
 
-bot = MyBot()
 
 @bot.event
 async def on_ready():
