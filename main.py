@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-
 from myserver import server_on
+
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -21,7 +21,6 @@ async def on_ready():
 @bot.command()
 async def ชวนเล่น(ctx):
     await ctx.send("@everyone มาเล่นกัน!")
-
 
 
 
