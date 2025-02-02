@@ -2,16 +2,10 @@ import os
 import discord
 from discord.ext import commands
 from discord import app_commands
-from dotenv import load_dotenv
 
-from myserver import server_on  # ตรวจสอบว่าฟังก์ชันนี้ทำงานได้จริง
 
-# โหลดตัวแปรจากไฟล์ .env
-load_dotenv()
+from myserver import server_on
 
-TOKEN = os.getenv("TOKEN")
-
-# กำหนด intents ให้บอทสามารถอ่านข้อความและส่งข้อความได้
 intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
@@ -28,8 +22,12 @@ async def on_ready():
 async def ชวนเล่น(ctx):
     await ctx.send("@everyone มาเล่นกัน!")
 
-# เปิดเซิร์ฟเวอร์ (ถ้าจำเป็น)
+
+
+
+
+
+
 server_on()
 
-# รันบอท
-bot.run(TOKEN)
+bot.run(os.getenv('TOKEN'))
