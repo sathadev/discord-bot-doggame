@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from discord import app_commands
+import asyncio
 
 from myserver import server_on
 
@@ -9,7 +10,7 @@ intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
 intents.message_content = True  # จำเป็นสำหรับการอ่านข้อความ
-
+intents.members = True  # จำเป็นสำหรับการตรวจสอบสมาชิก
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
@@ -22,6 +23,23 @@ async def on_ready():
 @bot.tree.command(name="ชวนเล่น", description="ส่งข้อความชวนทุกคนมาเล่น")
 async def ชวนเล่น(interaction: discord.Interaction):
     await interaction.response.send_message("@everyone มาเล่นกัน!", ephemeral=False)
+
+# ฟังก์ชั่นใหม่สำหรับแท็กผู้ใช้
+@bot.tree.command(name="ตามตัว", description="แท็กผู้ใช้จนกว่าจะเข้าห้องเสียง")
+async def ตามตัว(interaction: discord.Interaction, ชื่อดิส: str):
+    # ค้นหาผู้ใช้จากชื่อ
+    member = discord.utils.get(interaction.guild.members, name=ชื่อดิส)
+    
+    if member:
+        # เช็คว่าผู้ใช้เข้าห้องเสียงหรือยัง
+        while member.voice is None:
+            # ถ้ายังไม่เข้า
+            await interaction.channel.send(f"@{member.name} รอเข้าเสียง! @{member.name} รอเข้าเสียง! @{member.name} รอเข้าเสียง!")  # ส่งข้อความ
+            await asyncio.sleep(5)  # รอ 5 วินาที
+        # เมื่อผู้ใช้เข้าห้องเสียงแล้ว
+        await interaction.response.send_message(f"ผู้ใช้ {member.name} เข้าห้องเสียงแล้ว!", ephemeral=True)
+    else:
+        await interaction.response.send_message(f"ไม่พบผู้ใช้ {ชื่อดิส} ในเซิร์ฟเวอร์นี้", ephemeral=True)
 
 server_on()
 
